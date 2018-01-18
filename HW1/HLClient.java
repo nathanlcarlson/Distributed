@@ -20,17 +20,25 @@ public class HLClient {
         String serverAddress = "localhost";
         int port = 9090;
 
-        Socket s = new Socket(serverAddress, port);
-        DataOutputStream output = new DataOutputStream(s.getOutputStream());
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String guess = br.readLine();
-        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-        out.println(guess);
-        BufferedReader input =
-            new BufferedReader(new InputStreamReader(s.getInputStream()));
-        String answer = input.readLine();
-        System.out.println(answer);
+        
+        // DataOutputStream output = new DataOutputStream(s.getOutputStream());
+        String answer = "";
+        
+        
+        
+        while(!answer.equals("All done.")){
+            Socket s = new Socket(serverAddress, port);
+            PrintWriter write_end = new PrintWriter(s.getOutputStream(), true);
+            BufferedReader read_end = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));            
+            System.out.println("Type data to send to server");
+            String guess = br.readLine();
+            System.out.println(String.format("Sending: %s", guess));
+            write_end.println(guess);
+            answer = read_end.readLine();
+            System.out.println(answer);
+        }
+        
 
         System.exit(0);
     }

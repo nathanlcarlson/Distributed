@@ -24,17 +24,21 @@ public class HLServer {
         int port = 9090;
         ServerSocket listener = new ServerSocket(port);
         HighLowProtocol hlp = new HighLowProtocol();
+        String data_from_client = "";
         try {
             while (true) {
                 Socket socket = listener.accept();
                 try {
 
-                    PrintWriter out =
+                    PrintWriter write_end =
                         new PrintWriter(socket.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(
+                    BufferedReader read_end = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
                     // System.out.println();
-                    out.println(hlp.processInput(in.readLine()));
+                    data_from_client = read_end.readLine();
+                    System.out.println(data_from_client);
+
+                    write_end.println(hlp.processInput(data_from_client));
                 } finally {
                     socket.close();
                 }
