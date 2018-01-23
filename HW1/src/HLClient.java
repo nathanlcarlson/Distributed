@@ -7,16 +7,12 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.io.DataOutputStream;
 import java.io.PrintWriter;
+
 /**
- * Trivial client for the date server.
  */
 public class HLClient {
 
     /**
-     * Runs the client as an application.  First it displays a dialog
-     * box asking for the IP address or hostname of a host running
-     * the date server, then connects to it and displays the date that
-     * it serves.
      */
     public static void main(String[] args) throws IOException {
         String serverAddress = args[0];
@@ -40,9 +36,9 @@ public class HLClient {
             // Create read end of socket
             read_end = new BufferedReader(new InputStreamReader(s.getInputStream()));
             // Take input from stdin
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));            
+            BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));            
             //System.out.println("Type data to send to server");
-            String guess = br.readLine();
+            String guess = keyboard.readLine();
             //System.out.println(String.format("Sending: %s", guess));
             // Send data
             write_end.println(guess);

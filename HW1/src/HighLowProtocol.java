@@ -1,6 +1,8 @@
 
 package HW1;
 
+import java.util.Random;
+
 public class HighLowProtocol {
 
   private static final int WAITING_TO_START = -1;
@@ -10,16 +12,26 @@ public class HighLowProtocol {
   private static final int DONE = 3;
 
   private static final int MIN = 0;
-  private static final int MAX = 10;
+  private int MAX = 10;
 
   private int state = WAITING_TO_START;
-  private int number = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
+  int number;
+  Random rnd;
   
+  public HighLowProtocol (int _MAX) {
+    MAX = _MAX;
+    rnd = new Random();
+    number = rnd.nextInt(MAX);
+  }  
   public boolean is_waiting_to_start() {
     return (state == WAITING_TO_START);
   }
   public void start_game(){
     state = WAITING_FOR_GUESS;
+  }
+  public void end_game(){
+    number = rnd.nextInt(MAX);
+    state = WAITING_TO_START;
   }
   public String processInput(String input) {
     input = input.toLowerCase();
@@ -36,7 +48,7 @@ public class HighLowProtocol {
       }
       else {
         state = WAITING_TO_START;
-        number = MIN + (int)(Math.random() * ((MAX - MIN) + 1));
+        number = rnd.nextInt(MAX);
         output = "All done.";
       }
     }
