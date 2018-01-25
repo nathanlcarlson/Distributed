@@ -8,8 +8,7 @@ public class HighLowProtocol {
   private static final int WAITING_TO_START = -1;
   private static final int Q_START = 0;
   private static final int WAITING_FOR_GUESS = 1;
-  private static final int SENTCLUE = 2;
-  private static final int DONE = 3;
+
 
   private static final int MIN = 0;
   private int MAX = 10;
@@ -34,12 +33,24 @@ public class HighLowProtocol {
     state = WAITING_TO_START;
   }
   public String processInput(String input) {
+    
     input = input.toLowerCase();
     String output = "";
-    
+    if(input.equals("q")) {
+      state = WAITING_TO_START;
+      number = rnd.nextInt(MAX);
+      return "All done.";
+    }
 
     if(state == WAITING_FOR_GUESS){
-      int guess = Integer.parseInt(input);
+      int guess;
+      try {
+        guess = Integer.parseInt(input);
+      }
+      catch (Exception e){
+        return "Not a number";
+      }
+      
       if(guess > number){
         output = "Lower";
       }

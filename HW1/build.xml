@@ -21,12 +21,12 @@
     </target>
     <target name="run-server" description="run the server" depends="compile">
         <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW1.HLServer">
-        <arg line="4444 10"/>
+        <arg line="8000 10"/>
         </java>
     </target>
     <target name="run-client" description="run the client" depends="compile">
             <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW1.HLClient">
-            <arg line="localhost 4444"/>
+            <arg line="localhost 8000"/>
             </java>
     </target>
 </project>

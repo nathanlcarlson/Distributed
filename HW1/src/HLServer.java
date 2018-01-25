@@ -43,17 +43,17 @@ public class HLServer {
                     if (hlp.is_waiting_to_start()){
                         System.out.println("About to start");
                         hlp.start_game();
-                        write_end.println(String.format("Welcome. Guess a number [0, %d)", max));
+                        write_end.println(String.format("Welcome. Guess a number [0, %d), 'q' to quit", max));
                     }
                     else{
                         System.out.println("About to read");
                         data_from_client = read_end.readLine();
                         System.out.println("Read");
                         System.out.println(data_from_client);
-			            if(data_from_client == null) {
-			                hlp.end_game();
-			            }
-			            else {
+                        if(data_from_client == null) {
+                            hlp.end_game();
+                        }
+                        else {
                             write_end.println(hlp.processInput(data_from_client));
                         }
                     }
