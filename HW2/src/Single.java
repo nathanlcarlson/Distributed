@@ -32,17 +32,14 @@ public class Single{
         }
     }
     public static void main(String args[]){
+
+        int N = Integer.parseInt(args[0]);
         
-        int n_args = args.length;
-        
-        for(int i=0; i<n_args; ++i){
-            int N = Integer.parseInt(args[i]);
-            double[][] M1 = new double[N][N];
-            double[][] M2 = new double[N][N];
-            FillRandom(M1);
-            FillRandom(M2);
-            multiply(M1, M2);
-        }
+        double[][] M1 = new double[N][N];
+        double[][] M2 = new double[N][N];
+        FillRandom(M1);
+        FillRandom(M2);
+        multiply(M1, M2);
 
     }
 }
