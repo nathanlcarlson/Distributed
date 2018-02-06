@@ -96,14 +96,15 @@ public class Multi extends Thread{
             }
         }
         //System.out.println(M3[0][0]);
-        
+        int n_incorrect = 0;
         for(int i = 0; i<N; i++){
             for(int j = 0; j<N; j++){
                 if(M3[i][j]!=60.0){
-                    System.out.println(M3[i][j]);
+                    n_incorrect++;
                 }
             }
         }
+        System.out.println(String.format("Elements incorrect: %d", n_incorrect));
         
         
 
