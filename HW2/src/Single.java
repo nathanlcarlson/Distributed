@@ -39,7 +39,9 @@ public class Single{
         double[][] M2 = new double[N][N];
         FillRandom(M1);
         FillRandom(M2);
+        final long startTime = System.nanoTime();
         multiply(M1, M2);
-
+        final long endTime = System.nanoTime();
+        System.out.println("Total time to multiply: " + (endTime - startTime) + " ns" );
     }
 }

@@ -51,6 +51,8 @@ public class Multi extends Thread{
         double[][] _M1 = new double[N][N];
         double[][] _M2 = new double[N][N];
         double[][] _M3 = new double[N][N];
+        
+        // Fill with random values
         for(int i = 0; i<N; i++){
             for(int j = 0; j<N; j++){
                 _M1[i][j] = V1;
@@ -60,6 +62,7 @@ public class Multi extends Thread{
         }
 
         Multi[] threads = new Multi[N_thread];
+        final long startTime = System.nanoTime();
         for( int i = 0; i<N_thread; i++){
             threads[i] = new Multi(_M1, _M2, _M3, N, N_thread, i);
             threads[i].start();
@@ -71,7 +74,8 @@ public class Multi extends Thread{
             }
             catch(InterruptedException e){}
         }
-
+        final long endTime = System.nanoTime();
+        System.out.println("Total time to multiply: " + (endTime - startTime) + " ns" );
         int n_incorrect = 0;
         for(int i = 0; i<N; i++){
             for(int j = 0; j<N; j++){
