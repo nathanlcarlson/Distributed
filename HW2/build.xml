@@ -20,12 +20,12 @@
     </target>
     <target name="run-single" description="run the server" depends="compile">
         <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW2.Single">
-        <arg line="100 200 400 800 1000 1200 1400 1600 2000"/>
+        <arg line="100"/>
         </java>
     </target>
     <target name="run-multi" description="run the client" depends="compile">
         <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW2.Multi">
-        <arg line="300 93"/>
+        <arg line="300 2"/>
         </java>
     </target>
 </project>

@@ -17,13 +17,13 @@ public class Multi extends Thread{
         M2 = _M2;
         M3 = _M3;
     }
-   
-    // Multiply 
+
+    // Multiply
     public void run(){
         //System.out.println(M3.length);
-        
+
         int n_min = N / N_thread;
-        
+
         int n_diff = N % N_thread;
 
         int start = 0;
@@ -44,14 +44,34 @@ public class Multi extends Thread{
         }
     }
     public static void main(String args[]){
-        
-        int N = Integer.parseInt(args[0]);
-        int N_thread = Integer.parseInt(args[1]);
-        
+
+        if(args.length != 2){
+          System.out.println("Usage: java Multi [Square Matrix Width] [Number of Threads]");
+          return;
+        }
+        int N;
+        int N_thread;
+        try{
+          N = Integer.parseInt(args[0]);
+        }
+        catch (NumberFormatException e){
+          System.out.println("Usage: java Multi [Square Matrix Width] [Number of Threads]");
+          System.out.println("[Square Matrix Width] must be an integer");
+          return;
+        }
+        try{
+          N_thread = Integer.parseInt(args[1]);
+        }
+        catch (NumberFormatException e){
+          System.out.println("Usage: java Multi [Square Matrix Width] [Number of Threads]");
+          System.out.println("[Number of Threads] must be an integer");
+          return;
+        }
+
         double[][] _M1 = new double[N][N];
         double[][] _M2 = new double[N][N];
         double[][] _M3 = new double[N][N];
-        
+
         // Fill with random values
         for(int i = 0; i<N; i++){
             for(int j = 0; j<N; j++){
@@ -85,8 +105,6 @@ public class Multi extends Thread{
             }
         }
         System.out.println(String.format("Elements incorrect: %d", n_incorrect));
-        
-        
 
     }
 }

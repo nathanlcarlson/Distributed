@@ -13,7 +13,7 @@ public class Single{
             }
         }
         return M3;
-        
+
     }
     public static void PrintMatrix(double[][] M){
         int N = M.length;
@@ -33,8 +33,20 @@ public class Single{
     }
     public static void main(String args[]){
 
-        int N = Integer.parseInt(args[0]);
-        
+
+        if(args.length != 1){
+          System.out.println("Usage: java Single [Square Matrix Width]");
+          return;
+        }
+        int N;
+        try{
+          N = Integer.parseInt(args[0]);
+        }
+        catch (NumberFormatException e){
+          System.out.println("Usage: java Single [Square Matrix Width]");
+          System.out.println("[Square Matrix Width] must be an integer");
+          return;
+        }
         double[][] M1 = new double[N][N];
         double[][] M2 = new double[N][N];
         FillRandom(M1);
