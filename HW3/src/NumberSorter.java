@@ -9,14 +9,14 @@ package HW3;
  * @author Nathan Carlson
  */
 public class NumberSorter extends Worker {
-	private double m_1;
-	private double m_2;
-	private double m_3;
+	private int m_1;
+	private int m_2;
+	private int m_3;
 	
 	/**
 	 * @param id
 	 */
-	public NumberSorter(int id, double _1, double _2, double _3) {
+	public NumberSorter(int id, int _1, int _2, int _3) {
 		super(id);
 		m_1 = _1;
 		m_2 = _2;
@@ -28,7 +28,7 @@ public class NumberSorter extends Worker {
 	 */
 	@Override
 	public void doWork() {
-	    double t;
+	    int t;
 		if (m_1 > m_2){
 		    t = m_1;
 		    m_1 = m_2;
@@ -47,13 +47,13 @@ public class NumberSorter extends Worker {
 
 	}
 
-    public double getSmallest(){
+    public int getSmallest(){
         return m_1;
     }
-    public double getMiddle(){
+    public int getMiddle(){
         return m_2;
     }
-    public double getLargest(){
+    public int getLargest(){
         return m_3;
     }
 	/**
