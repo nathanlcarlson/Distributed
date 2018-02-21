@@ -1,3 +1,4 @@
+// Nathan Carlson
 /**
  * ClientManager.java
  */
@@ -14,16 +15,16 @@ import java.util.List;
 public interface ClientManager extends Remote {
 	/**
 	 * Registers a client with the volunteer computing server.
-	 * 
+	 *
 	 * @param userid the client name
 	 * @return a List of available work names. The names are unique.
 	 * @throws RemoteException if userid is not unique
 	 */
 	public List<String> register(String userid) throws RemoteException;
-	
+
 	/**
 	 * Requests work from the server.
-	 * 
+	 *
 	 * @param userId the client requesting work
 	 * @param taskName the project name
 	 * @return a Worker object that can perform
@@ -33,13 +34,13 @@ public interface ClientManager extends Remote {
 
 	/**
 	 * Submits work results from a volunteer to the server.
-	 * 
+	 *
 	 * @param userId the client submitting results
 	 * @param answer the completed Worker
 	 * @throws RemoteException
 	 */
 	public void submitResults(String userId, Worker answer) throws RemoteException;
-	
+
 	/**
 	 * Gets the score for a specified client.
 	 * @param userid the client name

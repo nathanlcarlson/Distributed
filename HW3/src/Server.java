@@ -1,3 +1,4 @@
+// Nathan Carlson
 package HW3;
 
 import java.rmi.registry.LocateRegistry;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Server implements ClientManager {
-    
+
     private List<String> names;
     private List<String> jobs;
     private Map<String, Float> scores;
@@ -31,7 +32,7 @@ public class Server implements ClientManager {
         params = new HashMap<Integer, List<Integer>>();
         answers = new HashMap<Integer, List<Integer>>();
     }
-    
+
     public List<String> register(String userid) throws RemoteException{
         if(names.contains(userid)){
             throw new RemoteException("User Id already exists");
@@ -42,24 +43,24 @@ public class Server implements ClientManager {
             System.out.println("Scores: ");
             for (String name: scores.keySet()){
                 String key = name.toString();
-                String value = scores.get(name).toString();  
-                System.out.println(key + " " + value);  
+                String value = scores.get(name).toString();
+                System.out.println(key + " " + value);
             }
             System.out.println();
             return jobs;
-        }      
+        }
     }
     public Worker requestWork(String userid, String taskName) throws RemoteException{
         if(!(names.contains(userid))){
             throw new RemoteException("User Id does not exist");
         }
-        
+
         Worker worker;
         // Store params
         ArrayList<Integer> t_params = new ArrayList();
         if(taskName.equals("PrimeChecker")){
             int rndInt = ThreadLocalRandom.current().nextInt(0, 1 << 10);
-            t_params.add(rndInt);      
+            t_params.add(rndInt);
             worker = new PrimeChecker(cur_task, rndInt);
         }
         else if(taskName.equals("FractionReducer")){
@@ -77,7 +78,7 @@ public class Server implements ClientManager {
             t_params.add(rndInt2);
             t_params.add(rndInt3);;
             worker = new NumberSorter(cur_task, rndInt1, rndInt2, rndInt3);
-        }      
+        }
         else{
             throw new RemoteException("Task does not exist");
         }
@@ -116,7 +117,7 @@ public class Server implements ClientManager {
             t_answers.add(t_answer.getSmallest());
             t_answers.add(t_answer.getMiddle());
             t_answers.add(t_answer.getLargest());;
-        }      
+        }
         else{
             throw new RemoteException("Task does not exist");
         }
@@ -124,19 +125,19 @@ public class Server implements ClientManager {
         System.out.println("Task: " + taskName);
         for (Integer tId: tasks.keySet()){
             String task = tasks.get(tId).toString();
-            if(task.equals(taskName)){               
+            if(task.equals(taskName)){
                 System.out.println("Params: " + params.get(tId));
                 System.out.println("Answer: " + answers.get(tId) + '\n');
-            } 
+            }
         }
-        
+
         scores.put(userid, scores.get(userid)+1.F);
     }
     public float getScore(String userid) throws RemoteException{
         if(!(names.contains(userid))){
             throw new RemoteException("User Id does not exist");
         }
-        
+
         return scores.get(userid);
     }
     public static void main(String args[]) {

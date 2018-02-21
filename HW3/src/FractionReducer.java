@@ -1,3 +1,4 @@
+// Nathan Carlson
 /**
  * FractionReducer.java
  */
@@ -5,13 +6,13 @@ package HW3;
 
 /**
  *
- * 
+ *
  * @author Nathan Carlson
  */
 public class FractionReducer extends Worker {
 	private int num;
 	private int den;
-	
+
 	/**
 	 * @param id
 	 */
@@ -30,11 +31,11 @@ public class FractionReducer extends Worker {
 		num /= gcf;
 		den /= gcf;
 	}
-	
+
 	private int gcf(int a, int b) {
         return b == 0 ? a : gcf(b, a % b);
     }
-    
+
     public int getNumerator(){
         return num;
     }

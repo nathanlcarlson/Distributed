@@ -1,3 +1,4 @@
+// Nathan Carlson
 /**
  * NumberSorter.java
  */
@@ -5,14 +6,14 @@ package HW3;
 
 /**
  *
- * 
+ *
  * @author Nathan Carlson
  */
 public class NumberSorter extends Worker {
 	private int m_1;
 	private int m_2;
 	private int m_3;
-	
+
 	/**
 	 * @param id
 	 */

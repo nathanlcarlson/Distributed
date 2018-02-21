@@ -1,3 +1,4 @@
+// Nathan Carlson
 /**
  * Worker.java
  */
@@ -11,14 +12,14 @@ import java.io.Serializable;
  */
 public abstract class Worker implements Serializable {
 	private int taskId;
-	
+
 	/**
 	 * @param the task id for the work task
 	 */
 	public Worker(int id) {
 		taskId = id;
 	}
-	
+
 	public int getTaskId() {
 		return taskId;
 	}

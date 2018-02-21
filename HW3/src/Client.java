@@ -1,3 +1,4 @@
+// Nathan Carlson
 package HW3;
 
 import java.rmi.registry.LocateRegistry;
@@ -14,7 +15,7 @@ public class Client {
             Registry registry = LocateRegistry.getRegistry(host);
             ClientManager server = (ClientManager)registry.lookup("ClientManager");
             List<String> jobs = server.register(name);
-            
+
             for(int i=0; i<15; ++i){
                 int j = ThreadLocalRandom.current().nextInt(0, jobs.size());
                 Worker worker = server.requestWork(name, jobs.get(j));
@@ -22,7 +23,7 @@ public class Client {
                 server.submitResults(name, worker);
                 System.out.println("My Score: "+server.getScore(name));
             }
-            
+
         }
         catch (Exception re) {
             re.printStackTrace();

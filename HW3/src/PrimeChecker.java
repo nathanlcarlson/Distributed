@@ -1,3 +1,4 @@
+// Nathan Carlson
 /**
  * PrimeChecker.java
  */
@@ -5,13 +6,13 @@ package HW3;
 
 /**
  * A not particularly efficient way to test if an integer is prime.
- * 
+ *
  * @author david apostal
  */
 public class PrimeChecker extends Worker {
 	private int value;
 	private boolean prime = true;
-	
+
 	/**
 	 * @param id
 	 */
@@ -32,7 +33,7 @@ public class PrimeChecker extends Worker {
 			}
 		}
 	}
-	
+
 	public boolean isPrime() {
 		return prime;
 	}
