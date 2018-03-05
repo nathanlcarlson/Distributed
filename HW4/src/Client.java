@@ -1,5 +1,5 @@
 // Nathan Carlson
-package HW3;
+package HW4;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

@@ -2,7 +2,7 @@
 /**
  * PrimeChecker.java
  */
-package HW3;
+package HW4;
 
 /**
  * A not particularly efficient way to test if an integer is prime.

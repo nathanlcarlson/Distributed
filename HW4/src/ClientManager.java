@@ -2,7 +2,7 @@
 /**
  * ClientManager.java
  */
-package HW3;
+package HW4;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -20,7 +20,16 @@ public interface ClientManager extends Remote {
 	 * @return a List of available work names. The names are unique.
 	 * @throws RemoteException if userid is not unique
 	 */
-	public List<String> register(String userid) throws RemoteException;
+	public List<String> register(String userId) throws RemoteException;
+
+	/**
+	 * Connects a client with the volunteer computing server.
+	 *
+	 * @param userId the client name
+	 * @return	a List of available work names. The names are unique.
+	 * @throws RemoteException if the user id is unknown to the server
+	 */
+	public List<String> connect(String userId) throws RemoteException;
 
 	/**
 	 * Requests work from the server.
@@ -28,7 +37,7 @@ public interface ClientManager extends Remote {
 	 * @param userId the client requesting work
 	 * @param taskName the project name
 	 * @return a Worker object that can perform
-	 * @throws RemoteException if something goes wrong during Worker.doWork()
+	 * @throws RemoteException if userId is unknown to the server
 	 */
 	public Worker requestWork(String userId, String taskName) throws RemoteException;
 
@@ -37,7 +46,7 @@ public interface ClientManager extends Remote {
 	 *
 	 * @param userId the client submitting results
 	 * @param answer the completed Worker
-	 * @throws RemoteException
+	 * @throws RemoteException if userid is unknown to the server
 	 */
 	public void submitResults(String userId, Worker answer) throws RemoteException;
 
@@ -45,7 +54,7 @@ public interface ClientManager extends Remote {
 	 * Gets the score for a specified client.
 	 * @param userid the client name
 	 * @return the client's current score
-	 * @throws RemoteException if userid is unknown
+	 * @throws RemoteException if userid is unknown to the server
 	 */
-	public float getScore(String userid) throws RemoteException;
+	public float getScore(String userId) throws RemoteException;
 }

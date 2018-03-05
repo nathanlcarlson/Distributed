@@ -1,5 +1,5 @@
 // Nathan Carlson
-package HW3;
+package HW4;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -15,6 +15,7 @@ public class Server implements ClientManager {
 
     private List<String> names;
     private List<String> jobs;
+    private Connection conn;
     private Map<String, Float> scores;
     private Map<Integer, String> tasks;
     private Map<Integer, List<Integer>> params;
@@ -47,6 +48,23 @@ public class Server implements ClientManager {
                 System.out.println(key + " " + value);
             }
             System.out.println();
+            return jobs;
+        }
+    }
+    public List<String> connect(String userid) throws RemoteException{
+        if(!(names.contains(userid))){
+            throw new RemoteException("User Id does not exist");
+        }
+        else{
+            //names.add(userid);
+            //scores.put(userid, 0.F);
+            // System.out.println("Scores: ");
+            // for (String name: scores.keySet()){
+            //     String key = name.toString();
+            //     String value = scores.get(name).toString();
+            //     System.out.println(key + " " + value);
+            // }
+            //System.out.println();
             return jobs;
         }
     }
@@ -142,10 +160,29 @@ public class Server implements ClientManager {
     }
     public static void main(String args[]) {
         try {
+            if(!(args.length == 1 || args.length == 2)){
+              System.out.println("Usage: [port]");
+              System.out.println("or, to reset the database, \nUsage: [port] reset");
+              return;
+            }
+            if(args.length == 2 && !args[1].equals("reset")){
+              System.out.println("Please specify 'reset' as the second argument if you would like to reset the database");
+              System.out.println("Usage: [port] reset");
+              return;
+            }
+            int port;
+            try{
+              port = Integer.parseInt(args[0]);
+            }
+            except(NumberFormatException e){
+              System.out.println("Usage: [port]");
+              System.out.println("Port must be an integer");
+              return;
+            }
             Server obj = new Server();
-            ClientManager stub = (ClientManager)UnicastRemoteObject.exportObject(obj, 0);
+            ClientManager stub = (ClientManager)UnicastRemoteObject.exportObject(obj, port);
+            Registry registry = LocateRegistry.getRegistry(port);
 
-            Registry registry = LocateRegistry.getRegistry();
             registry.rebind("ClientManager", stub);
 
             //System.out.println("ClientManager Bound");

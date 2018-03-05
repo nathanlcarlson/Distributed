@@ -2,7 +2,7 @@
 /**
  * NumberSorter.java
  */
-package HW3;
+package HW4;
 
 /**
  *
