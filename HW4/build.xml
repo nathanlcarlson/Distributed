@@ -19,11 +19,12 @@
         <javac srcdir="${src.dir}" destdir="${build.dir}"/>
     </target>
     <target name="run-client" description="run the server" depends="compile">
-        <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW3.Client">
+        <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW4.Client">
         </java>
     </target>
     <target name="run-server" description="run the client" depends="compile">
-        <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW3.Server">
+        <java fork="true" failonerror="yes" classpath="${build.dir}" classname="HW4.Server">
+            <arg line="8080"/>
         </java>
     </target>
 </project>

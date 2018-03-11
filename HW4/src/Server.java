@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 
 public class Server implements ClientManager {
 
@@ -20,8 +26,7 @@ public class Server implements ClientManager {
     private Map<Integer, String> tasks;
     private Map<Integer, List<Integer>> params;
     private Map<Integer, List<Integer>> answers;
-    private int cur_task = 0;
-
+    private Connection db;
     public Server() {
         jobs = new ArrayList<String>();
         jobs.add("PrimeChecker");
@@ -32,48 +37,50 @@ public class Server implements ClientManager {
         tasks = new HashMap<Integer, String>();
         params = new HashMap<Integer, List<Integer>>();
         answers = new HashMap<Integer, List<Integer>>();
+        String url = "jdbc:mysql://localhost:3306/hw4";
+		String userId = "hw4admin";
+		String passwd = "hw4pass";
+        try{
+            db = DriverManager.getConnection(url, userId, passwd);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public List<String> register(String userid) throws RemoteException{
-        if(names.contains(userid)){
+
+        if(userExists(userid)){
             throw new RemoteException("User Id already exists");
         }
         else{
-            names.add(userid);
-            scores.put(userid, 0.F);
-            System.out.println("Scores: ");
-            for (String name: scores.keySet()){
-                String key = name.toString();
-                String value = scores.get(name).toString();
-                System.out.println(key + " " + value);
-            }
-            System.out.println();
-            return jobs;
-        }
-    }
-    public List<String> connect(String userid) throws RemoteException{
-        if(!(names.contains(userid))){
-            throw new RemoteException("User Id does not exist");
-        }
-        else{
-            //names.add(userid);
-            //scores.put(userid, 0.F);
+            String sql = "insert into `users` (userId, score) values ('"+userid+"', 0);";
+            executeUpdate(sql);
             // System.out.println("Scores: ");
             // for (String name: scores.keySet()){
             //     String key = name.toString();
             //     String value = scores.get(name).toString();
             //     System.out.println(key + " " + value);
             // }
-            //System.out.println();
+            // System.out.println();
+            return jobs;
+        }
+    }
+    public List<String> connect(String userid) throws RemoteException{
+        if(!userExists(userid)){
+            throw new RemoteException("User Id does not exist");
+        }
+        else{
             return jobs;
         }
     }
     public Worker requestWork(String userid, String taskName) throws RemoteException{
-        if(!(names.contains(userid))){
+        if(!userExists(userid)){
             throw new RemoteException("User Id does not exist");
         }
 
         Worker worker;
+        int cur_task;
         // Store params
         ArrayList<Integer> t_params = new ArrayList();
         if(taskName.equals("PrimeChecker")){
@@ -108,7 +115,7 @@ public class Server implements ClientManager {
     }
     public void submitResults(String userid, Worker answer) throws RemoteException{
         // Check valid userid
-        if(!(names.contains(userid))){
+        if(!userExists(userid)){
             throw new RemoteException("User Id does not exist");
         }
         // Get task Id
@@ -152,36 +159,105 @@ public class Server implements ClientManager {
         scores.put(userid, scores.get(userid)+1.F);
     }
     public float getScore(String userid) throws RemoteException{
-        if(!(names.contains(userid))){
+        if(!userExists(userid)){
             throw new RemoteException("User Id does not exist");
         }
 
         return scores.get(userid);
     }
+    private int executeUpdate(String sql){
+        try{
+            Statement stmt = db.createStatement();
+            int rs = stmt.executeUpdate(sql);
+            return rs;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    private int insertTask(String name, Integer a, Integer b, Integer c){
+        String sql = "INSERT INTO `tasks` (taskName, in1, in2, in3) VALUES ("+name+","+a+","+b+","+c+");"
+    }
+    private boolean userExists(String userId){
+        String sql = "SELECT * FROM `users` WHERE userId='"+userId+"';";
+        System.out.println(sql);
+        try{
+            Statement stmt = db.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs.next();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public void createTables(){
+        String sql = "";
+        sql += "CREATE TABLE IF NOT EXISTS `users` ( ";
+        sql += "userId varchar(50) NOT NULL primary key, ";
+        sql += "score int, ";
+        sql += "UNIQUE(userId) ";
+        sql += "); ";
+        executeUpdate(sql);
+        sql = "";
+        sql += "CREATE TABLE IF NOT EXISTS `tasks` ( ";
+        sql += "taskId int NOT NULL AUTO_INCREMENT PRIMARY KEY, ";
+        sql += "taskName varchar(50) NOT NULL, ";
+        sql += "in1 int, ";
+        sql += "in2 int, ";
+        sql += "in3 int, ";
+        sql += "out1 int, ";
+        sql += "out2 int, ";
+        sql += "out3 int, ";
+        sql += "UNIQUE(taskId) ";
+        sql += "); ";
+        executeUpdate(sql);
+        sql = "";
+        sql += "CREATE TABLE IF NOT EXISTS `usertasks` ( ";
+        sql += "userId varchar(50) NOT NULL, ";
+        sql += "taskId int NOT NULL, ";
+        sql += "UNIQUE(taskId), ";
+        sql += "FOREIGN KEY (taskId) REFERENCES tasks(taskId), ";
+        sql += "FOREIGN KEY (userId) REFERENCES users(userId) ";
+        sql += "); ";
+        executeUpdate(sql);
+
+    }
+    public void dropTables(){
+        String sql = "";
+        sql += "DROP TABLE IF EXISTS ";
+        sql += "usertasks, users, tasks;";
+        executeUpdate(sql);
+    }
     public static void main(String args[]) {
+
+        if(!(args.length == 1 || args.length == 2)){
+            System.out.println("Usage: [port]");
+            System.out.println("or, to reset the database, \nUsage: [port] reset");
+            return;
+        }
+        if(args.length == 2 && !args[1].equals("reset")){
+            System.out.println("Please specify 'reset' as the second argument if you would like to reset the database");
+            System.out.println("Usage: [port] reset");
+            return;
+        }
+        int port;
+        try{
+            port = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e){
+            System.out.println("Usage: [port]");
+            System.out.println("Port must be an integer");
+            return;
+        }
         try {
-            if(!(args.length == 1 || args.length == 2)){
-              System.out.println("Usage: [port]");
-              System.out.println("or, to reset the database, \nUsage: [port] reset");
-              return;
-            }
-            if(args.length == 2 && !args[1].equals("reset")){
-              System.out.println("Please specify 'reset' as the second argument if you would like to reset the database");
-              System.out.println("Usage: [port] reset");
-              return;
-            }
-            int port;
-            try{
-              port = Integer.parseInt(args[0]);
-            }
-            except(NumberFormatException e){
-              System.out.println("Usage: [port]");
-              System.out.println("Port must be an integer");
-              return;
-            }
             Server obj = new Server();
+            if(args.length == 2){
+                obj.dropTables();
+                obj.createTables();
+            }
             ClientManager stub = (ClientManager)UnicastRemoteObject.exportObject(obj, port);
-            Registry registry = LocateRegistry.getRegistry(port);
+            Registry registry = LocateRegistry.createRegistry(port);
 
             registry.rebind("ClientManager", stub);
 

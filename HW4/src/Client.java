@@ -11,18 +11,25 @@ public class Client {
     public static void main(String args[]){
         String host = "127.0.0.1";
         String name = "ncarlson";
+        int port = 8080;
         try {
-            Registry registry = LocateRegistry.getRegistry(host);
+            Registry registry = LocateRegistry.getRegistry(host, port);
             ClientManager server = (ClientManager)registry.lookup("ClientManager");
-            List<String> jobs = server.register(name);
-
-            for(int i=0; i<15; ++i){
-                int j = ThreadLocalRandom.current().nextInt(0, jobs.size());
-                Worker worker = server.requestWork(name, jobs.get(j));
-                worker.doWork();
-                server.submitResults(name, worker);
-                System.out.println("My Score: "+server.getScore(name));
+            List<String> jobs;
+            try{
+                jobs = server.register(name);
             }
+            catch(RemoteException e){
+                jobs = server.connect(name);
+            }
+
+            // for(int i=0; i<15; ++i){
+            //     int j = ThreadLocalRandom.current().nextInt(0, jobs.size());
+            //     Worker worker = server.requestWork(name, jobs.get(j));
+            //     worker.doWork();
+            //     server.submitResults(name, worker);
+            //     System.out.println("My Score: "+server.getScore(name));
+            // }
 
         }
         catch (Exception re) {
