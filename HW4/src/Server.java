@@ -18,7 +18,6 @@ import java.sql.Statement;
 public class Server implements ClientManager {
 
     private List<String> jobs;
-    private Connection conn;
     private Connection db;
     public Server() throws RemoteException {
         jobs = new ArrayList<String>();
